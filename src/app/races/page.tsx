@@ -1,7 +1,11 @@
 import Nav from "@/components/Nav";
 import { recentCalls, fmt, scoreColor, timeToScore } from "@/lib/data";
+import { fetchSheetRaces } from "@/lib/sheets";
 
-export default function RacesPage() {
+export default async function RacesPage() {
+  const sheetRaces = await fetchSheetRaces();
+  const hasSheetData = sheetRaces.length > 0;
+
   return (
     <div className="min-h-screen flex flex-col">
       <Nav active="/races" />
@@ -15,7 +19,7 @@ export default function RacesPage() {
             Races
           </h1>
           <p className="text-sm text-muted leading-relaxed">
-            {recentCalls.length} recent race calls tracked across all desks.
+            {hasSheetData ? sheetRaces.length : recentCalls.length} race calls tracked across all desks.
           </p>
         </section>
 
@@ -34,31 +38,63 @@ export default function RacesPage() {
               </tr>
             </thead>
             <tbody>
-              {recentCalls.map((r, ri) => {
-                const times = r.times.map((t) => t.minutes);
-                const best = Math.min(...times);
-                const worst = Math.max(...times);
-                const getTime = (name: string) => r.times.find((t) => t.caller === name);
-                return (
-                  <tr key={ri} className="border-t border-border">
-                    <td className="py-3 pr-4">
-                      <span className="font-medium text-foreground">{r.race}</span>
-                      <span className="text-muted ml-2">{r.state}</span>
-                    </td>
-                    <td className="py-3 px-4 text-muted text-[11px] uppercase tracking-wider">{r.category}</td>
-                    {["VoteHub", "DDHQ", "AP"].map((name) => {
-                      const t = getTime(name);
-                      const score = t ? timeToScore(t.minutes, best, worst) : 50;
-                      return (
-                        <td key={name} className="py-3 px-4 text-right font-mono tabular-nums" style={{ backgroundColor: t ? scoreColor(score) : undefined }}>
-                          {t ? fmt(t.minutes) : "\u2014"}
+              {hasSheetData
+                ? sheetRaces.map((r, ri) => {
+                    const times = r.times.map((t) => t.minutes);
+                    const best = times.length > 0 ? Math.min(...times) : 0;
+                    const worst = times.length > 0 ? Math.max(...times) : 0;
+                    const getTime = (name: string) => r.times.find((t) => t.caller === name);
+                    return (
+                      <tr key={ri} className="border-t border-border">
+                        <td className="py-3 pr-4">
+                          <span className="font-medium text-foreground">{r.race}</span>
+                          <span className="text-muted ml-2">{r.state}</span>
                         </td>
-                      );
-                    })}
-                    <td className="py-3 pl-4 text-right text-muted">{r.date}</td>
-                  </tr>
-                );
-              })}
+                        <td className="py-3 px-4 text-muted text-[11px] uppercase tracking-wider">{r.category}</td>
+                        {["VoteHub", "DDHQ", "AP"].map((name) => {
+                          const t = getTime(name);
+                          const score = t ? timeToScore(t.minutes, best, worst) : 50;
+                          return (
+                            <td key={name} className="py-3 px-4 text-right font-mono tabular-nums" style={{ backgroundColor: t ? scoreColor(score) : undefined }}>
+                              {t ? (
+                                t.link ? (
+                                  <a href={t.link} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                                    {fmt(t.minutes)}
+                                  </a>
+                                ) : fmt(t.minutes)
+                              ) : "\u2014"}
+                            </td>
+                          );
+                        })}
+                        <td className="py-3 pl-4 text-right text-muted">{r.date}</td>
+                      </tr>
+                    );
+                  })
+                : recentCalls.map((r, ri) => {
+                    const times = r.times.map((t) => t.minutes);
+                    const best = Math.min(...times);
+                    const worst = Math.max(...times);
+                    const getTime = (name: string) => r.times.find((t) => t.caller === name);
+                    return (
+                      <tr key={ri} className="border-t border-border">
+                        <td className="py-3 pr-4">
+                          <span className="font-medium text-foreground">{r.race}</span>
+                          <span className="text-muted ml-2">{r.state}</span>
+                        </td>
+                        <td className="py-3 px-4 text-muted text-[11px] uppercase tracking-wider">{r.category}</td>
+                        {["VoteHub", "DDHQ", "AP"].map((name) => {
+                          const t = getTime(name);
+                          const score = t ? timeToScore(t.minutes, best, worst) : 50;
+                          return (
+                            <td key={name} className="py-3 px-4 text-right font-mono tabular-nums" style={{ backgroundColor: t ? scoreColor(score) : undefined }}>
+                              {t ? fmt(t.minutes) : "\u2014"}
+                            </td>
+                          );
+                        })}
+                        <td className="py-3 pl-4 text-right text-muted">{r.date}</td>
+                      </tr>
+                    );
+                  })}
             </tbody>
           </table>
         </div>

@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Caller {
+  id        String @id @default(cuid())
+  name      String
+  shortName String
+  slug      String @unique
+  color     String
+  calls     Call[]
+}
+
+model ElectionNight {
+  id    String   @id @default(cuid())
+  name  String
+  date  DateTime
+  races Race[]
+}
+
+model Race {
+  id              String        @id @default(cuid())
+  name            String
+  state           String
+  category        String
+  raceType        String        @default("General")
+  pollCloseTime   DateTime
+  electionNightId String
+  electionNight   ElectionNight @relation(fields: [electionNightId], references: [id], onDelete: Cascade)
+  calls           Call[]
+}
+
+model Call {
+  id                String   @id @default(cuid())
+  raceId            String
+  callerId          String
+  calledAt          DateTime
+  minutesAfterClose Float
+  tweetUrl          String?
+  screenshotPath    String?
+  race              Race     @relation(fields: [raceId], references: [id], onDelete: Cascade)
+  caller            Caller   @relation(fields: [callerId], references: [id], onDelete: Cascade)
+
+  @@unique([raceId, callerId])
+}

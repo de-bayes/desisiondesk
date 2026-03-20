@@ -11,11 +11,7 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-ARG DATABASE_URL
-ARG DIRECT_DATABASE_URL
-ENV DATABASE_URL=$DATABASE_URL
-ENV DIRECT_DATABASE_URL=$DIRECT_DATABASE_URL
-RUN npx prisma migrate deploy
+RUN npx prisma generate
 RUN npm run build
 
 # Run
@@ -27,6 +23,11 @@ ENV PORT=3000
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
+COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD npx prisma migrate deploy && node server.js

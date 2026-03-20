@@ -53,8 +53,8 @@ export default function Methodology() {
               </div>
               <hr className="border-border mb-4" />
               <div className="font-mono text-xs text-foreground space-y-1">
-                <div>S = 0.15 &middot; C<sub>instant</sub> + 0.20 &middot; C<sub>lean</sub> + 0.30 &middot; C<sub>competitive</sub> + 0.35 &middot; C<sub>tossup</sub></div>
-                <div className="pl-4">+ 1.0 &middot; F<sub>instant</sub> + 2.0 &middot; F<sub>lean</sub> + 3.5 &middot; F<sub>competitive</sub> + 5.0 &middot; F<sub>tossup</sub></div>
+                <div>S = 0.15 &middot; C<sub>precall</sub> + 0.35 &middot; C<sub>strong</sub> + 0.50 &middot; C<sub>tossup</sub></div>
+                <div className="pl-4">+ first-call bonus (up to 5 pts)</div>
               </div>
             </div>
           </div>
@@ -86,10 +86,9 @@ export default function Methodology() {
               </thead>
               <tbody className="font-mono">
                 {[
-                  { cat: "Instant", w: "15%", b: "1.0 pt", note: "Table stakes" },
-                  { cat: "Lean", w: "20%", b: "2.0 pts", note: "Moderate importance" },
-                  { cat: "Competitive", w: "30%", b: "3.5 pts", note: "Speed separates the best" },
-                  { cat: "Toss-Up", w: "35%", b: "5.0 pts", note: "Hardest calls matter most" },
+                  { cat: "Pre-Call", w: "15%", b: "1.0 pt", note: "Obvious races, called at poll close" },
+                  { cat: "Strong/Lean", w: "35%", b: "2.0 pts", note: "70-90% on prediction markets" },
+                  { cat: "Toss-Up", w: "50%", b: "5.0 pts", note: "50-70% — the hardest calls" },
                 ].map((row) => (
                   <tr key={row.cat} className="border-t border-border">
                     <td className="py-3 pr-4 font-sans">
@@ -132,10 +131,9 @@ export default function Methodology() {
               </thead>
               <tbody className="font-mono text-foreground">
                 {[
-                  { cat: "Instant", vals: ["<30s", "<1m", "<2m", "<5m"] },
-                  { cat: "Lean", vals: ["<5m", "<10m", "<15m", "<25m"] },
-                  { cat: "Competitive", vals: ["<20m", "<30m", "<45m", "<60m"] },
-                  { cat: "Toss-Up", vals: ["<1h", "<1.5h", "<2h", "<3h"] },
+                  { cat: "Pre-Call", vals: ["<30s", "<1m", "<2m", "<5m"] },
+                  { cat: "Strong/Lean", vals: ["<5m", "<15m", "<30m", "<45m"] },
+                  { cat: "Toss-Up", vals: ["<30m", "<1h", "<1.5h", "<2.5h"] },
                 ].map((row) => (
                   <tr key={row.cat} className="border-t border-border">
                     <td className="py-2 pr-3 font-sans text-foreground">{row.cat}</td>
@@ -166,7 +164,7 @@ export default function Methodology() {
             </p>
 
             <div className="bg-surface border border-border rounded-lg p-4 font-mono text-xs text-foreground">
-              F<sub>total</sub> = 1.0 &middot; rate<sub>instant</sub> + 2.0 &middot; rate<sub>lean</sub> + 3.5 &middot; rate<sub>competitive</sub> + 5.0 &middot; rate<sub>tossup</sub>
+              F<sub>total</sub> = 1.0 &middot; rate<sub>precall</sub> + 2.0 &middot; rate<sub>strong</sub> + 5.0 &middot; rate<sub>tossup</sub>
             </div>
 
             <p className="text-xs">
@@ -206,9 +204,9 @@ export default function Methodology() {
 
             <p className="text-sm text-muted leading-relaxed">
               Based on {grades[0].totalCalls} tracked race calls across{" "}
-              {grades[0].countInstant} instant, {grades[0].countLean} lean,{" "}
-              {grades[0].countCompetitive} competitive, and{" "}
-              {grades[0].countTossup} toss-up races.
+              {grades[0].countPrecall} pre-calls, {grades[0].countStrong} strong/lean,{" "}
+              and {grades[0].countTossup} toss-up races. Competitiveness classified
+              by prediction market odds.
             </p>
           </div>
         </section>

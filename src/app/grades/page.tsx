@@ -68,9 +68,8 @@ export default function Grades() {
                     <tr>
                       <th className="pb-3 pr-3 text-[11px] font-semibold uppercase tracking-widest text-muted">Desk</th>
                       <th className="pb-3 px-3 text-[11px] font-semibold uppercase tracking-widest text-muted text-center">Grade</th>
-                      <th className="pb-3 px-3 text-[11px] font-semibold uppercase tracking-widest text-muted text-right">Instant</th>
-                      <th className="pb-3 px-3 text-[11px] font-semibold uppercase tracking-widest text-muted text-right">Lean</th>
-                      <th className="pb-3 px-3 text-[11px] font-semibold uppercase tracking-widest text-muted text-right">Comp.</th>
+                      <th className="pb-3 px-3 text-[11px] font-semibold uppercase tracking-widest text-muted text-right">Pre-Call</th>
+                      <th className="pb-3 px-3 text-[11px] font-semibold uppercase tracking-widest text-muted text-right">Strong</th>
                       <th className="pb-3 px-3 text-[11px] font-semibold uppercase tracking-widest text-muted text-right">Toss-Up</th>
                       <th className="pb-3 pl-3 text-[11px] font-semibold uppercase tracking-widest text-muted text-right">1st %</th>
                     </tr>
@@ -84,9 +83,8 @@ export default function Grades() {
                         <tr key={g.id} className="border-t border-border">
                           <td className="py-3 pr-3 font-medium text-foreground">{g.name}</td>
                           <td className="py-3 px-3 text-center font-bold" style={{ backgroundColor: gradeColor(grade) }}>{grade}</td>
-                          <td className="py-3 px-3 text-right font-mono tabular-nums" style={{ backgroundColor: scoreColor(cats.instant) }}>{fmt(g.avgInstant)}</td>
-                          <td className="py-3 px-3 text-right font-mono tabular-nums" style={{ backgroundColor: scoreColor(cats.lean) }}>{fmt(g.avgLean)}</td>
-                          <td className="py-3 px-3 text-right font-mono tabular-nums" style={{ backgroundColor: scoreColor(cats.competitive) }}>{fmt(g.avgCompetitive)}</td>
+                          <td className="py-3 px-3 text-right font-mono tabular-nums" style={{ backgroundColor: scoreColor(cats.precall) }}>{fmt(g.avgPrecall)}</td>
+                          <td className="py-3 px-3 text-right font-mono tabular-nums" style={{ backgroundColor: scoreColor(cats.strong) }}>{fmt(g.avgStrong)}</td>
                           <td className="py-3 px-3 text-right font-mono tabular-nums" style={{ backgroundColor: scoreColor(cats.tossup) }}>{fmt(g.avgTossup)}</td>
                           <td className="py-3 pl-3 text-right font-mono tabular-nums" style={{ backgroundColor: scoreColor(Math.round((g.firstCallPct / Math.max(...grades.map((x) => x.firstCallPct))) * 100)) }}>{g.firstCallPct}%</td>
                         </tr>

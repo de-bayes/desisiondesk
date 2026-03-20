@@ -10,8 +10,8 @@ const colors: Record<string, string> = {
   ap: callerColors.ap,
 };
 
-const axes = ["Instant", "Lean", "Competitive", "Toss-Up"];
-const axisKeys = ["instant", "lean", "competitive", "tossup"] as const;
+const axes = ["Pre-Call", "Strong/Lean", "Toss-Up"];
+const axisKeys = ["precall", "strong", "tossup"] as const;
 
 function polarToCart(cx: number, cy: number, r: number, angleIdx: number, total: number) {
   const angle = (Math.PI * 2 * angleIdx) / total - Math.PI / 2;
@@ -31,7 +31,7 @@ export default function RadarByType() {
       .map((key, i) => {
         const val = scores[key];
         const r = (val / 100) * maxR;
-        const pt = polarToCart(cx, cy, r, i, 4);
+        const pt = polarToCart(cx, cy, r, i, 3);
         return `${pt.x},${pt.y}`;
       })
       .join(" ");
@@ -63,7 +63,7 @@ export default function RadarByType() {
           {[0.25, 0.5, 0.75, 1].map((t) => {
             const r = t * maxR;
             const pts = Array.from({ length: 4 }, (_, i) => {
-              const p = polarToCart(cx, cy, r, i, 4);
+              const p = polarToCart(cx, cy, r, i, 3);
               return `${p.x},${p.y}`;
             }).join(" ");
             return (
@@ -126,7 +126,7 @@ export default function RadarByType() {
                 {axisKeys.map((key, i) => {
                   const val = caller.scores[key];
                   const r = (val / 100) * maxR;
-                  const pt = polarToCart(cx, cy, r, i, 4);
+                  const pt = polarToCart(cx, cy, r, i, 3);
                   return (
                     <circle
                       key={`${caller.id}-${key}`}

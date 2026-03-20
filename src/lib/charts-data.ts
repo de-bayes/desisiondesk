@@ -76,9 +76,8 @@ export const distributions: DistributionData[] = [
 export type RaceType = "state" | "congressional" | "senate" | "primaries";
 
 export interface RadarScores {
-  instant: number;
-  lean: number;
-  competitive: number;
+  precall: number;
+  strong: number;
   tossup: number;
 }
 
@@ -97,36 +96,36 @@ export const radarData: RadarByType[] = [
     raceType: "state",
     label: "State Races",
     callers: [
-      { id: "votehub", name: "VoteHub", scores: { instant: 95, lean: 88, competitive: 82, tossup: 70 } },
-      { id: "ddhq", name: "DDHQ", scores: { instant: 90, lean: 75, competitive: 68, tossup: 58 } },
-      { id: "ap", name: "AP", scores: { instant: 80, lean: 55, competitive: 45, tossup: 35 } },
+      { id: "votehub", name: "VoteHub", scores: { precall: 95, strong: 85, tossup: 70 } },
+      { id: "ddhq", name: "DDHQ", scores: { precall: 90, strong: 72, tossup: 58 } },
+      { id: "ap", name: "AP", scores: { precall: 80, strong: 50, tossup: 35 } },
     ],
   },
   {
     raceType: "congressional",
     label: "Congressional",
     callers: [
-      { id: "votehub", name: "VoteHub", scores: { instant: 97, lean: 90, competitive: 78, tossup: 65 } },
-      { id: "ddhq", name: "DDHQ", scores: { instant: 92, lean: 80, competitive: 72, tossup: 55 } },
-      { id: "ap", name: "AP", scores: { instant: 82, lean: 60, competitive: 50, tossup: 40 } },
+      { id: "votehub", name: "VoteHub", scores: { precall: 97, strong: 84, tossup: 65 } },
+      { id: "ddhq", name: "DDHQ", scores: { precall: 92, strong: 76, tossup: 55 } },
+      { id: "ap", name: "AP", scores: { precall: 82, strong: 55, tossup: 40 } },
     ],
   },
   {
     raceType: "senate",
     label: "Senate",
     callers: [
-      { id: "votehub", name: "VoteHub", scores: { instant: 93, lean: 85, competitive: 76, tossup: 72 } },
-      { id: "ddhq", name: "DDHQ", scores: { instant: 88, lean: 78, competitive: 65, tossup: 60 } },
-      { id: "ap", name: "AP", scores: { instant: 85, lean: 65, competitive: 55, tossup: 48 } },
+      { id: "votehub", name: "VoteHub", scores: { precall: 93, strong: 80, tossup: 72 } },
+      { id: "ddhq", name: "DDHQ", scores: { precall: 88, strong: 72, tossup: 60 } },
+      { id: "ap", name: "AP", scores: { precall: 85, strong: 60, tossup: 48 } },
     ],
   },
   {
     raceType: "primaries",
     label: "Primaries",
     callers: [
-      { id: "votehub", name: "VoteHub", scores: { instant: 92, lean: 84, competitive: 80, tossup: 68 } },
-      { id: "ddhq", name: "DDHQ", scores: { instant: 94, lean: 82, competitive: 70, tossup: 52 } },
-      { id: "ap", name: "AP", scores: { instant: 78, lean: 58, competitive: 42, tossup: 30 } },
+      { id: "votehub", name: "VoteHub", scores: { precall: 92, strong: 82, tossup: 68 } },
+      { id: "ddhq", name: "DDHQ", scores: { precall: 94, strong: 76, tossup: 52 } },
+      { id: "ap", name: "AP", scores: { precall: 78, strong: 50, tossup: 30 } },
     ],
   },
 ];

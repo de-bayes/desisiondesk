@@ -1,9 +1,8 @@
 import { grades, fmt } from "@/lib/data";
 
 const categories = [
-  { key: "avgInstant" as const, label: "Instant" },
-  { key: "avgLean" as const, label: "Lean" },
-  { key: "avgCompetitive" as const, label: "Competitive" },
+  { key: "avgPrecall" as const, label: "Pre-Call" },
+  { key: "avgStrong" as const, label: "Strong/Lean" },
   { key: "avgTossup" as const, label: "Toss-Up" },
 ];
 

@@ -131,7 +131,7 @@ export default function Methodology() {
               </thead>
               <tbody className="font-mono text-foreground">
                 {[
-                  { cat: "Pre-Call", vals: ["0m", "<1m", "<5m", "<15m"] },
+                  { cat: "Pre-Call", vals: ["<2m", "<5m", "<10m", "<20m"] },
                   { cat: "Strong/Lean", vals: ["<15m", "<45m", "<1.5h", "<3h"] },
                   { cat: "Toss-Up", vals: ["<1h", "<3h", "<6h", "<24h"] },
                 ].map((row) => (

@@ -18,7 +18,7 @@ export interface CallerGrade {
 
 // Benchmark thresholds (minutes) — A/B/C/D/F boundaries per category
 const thresholds: Record<string, number[]> = {
-  precall: [0, 1, 5, 15],           // should be called at poll close (0 min)
+  precall: [2, 5, 10, 20],           // called at poll close, A = within 2 min
   strong: [15, 45, 90, 180],        // 70-90% odds, typically 15m–3h
   tossup: [60, 180, 360, 1440],     // 50-70% odds, can take hours to days
 };

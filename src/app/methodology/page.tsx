@@ -131,9 +131,9 @@ export default function Methodology() {
               </thead>
               <tbody className="font-mono text-foreground">
                 {[
-                  { cat: "Pre-Call", vals: ["<30s", "<1m", "<2m", "<5m"] },
-                  { cat: "Strong/Lean", vals: ["<5m", "<15m", "<30m", "<45m"] },
-                  { cat: "Toss-Up", vals: ["<30m", "<1h", "<1.5h", "<2.5h"] },
+                  { cat: "Pre-Call", vals: ["0m", "<1m", "<5m", "<15m"] },
+                  { cat: "Strong/Lean", vals: ["<15m", "<45m", "<1.5h", "<3h"] },
+                  { cat: "Toss-Up", vals: ["<1h", "<3h", "<6h", "<24h"] },
                 ].map((row) => (
                   <tr key={row.cat} className="border-t border-border">
                     <td className="py-2 pr-3 font-sans text-foreground">{row.cat}</td>

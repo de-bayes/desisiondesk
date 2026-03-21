@@ -18,9 +18,9 @@ export interface CallerGrade {
 
 // Benchmark thresholds (minutes) — A/B/C/D/F boundaries per category
 const thresholds: Record<string, number[]> = {
-  precall: [0.5, 1, 2, 5],         // called at/near poll close
-  strong: [5, 15, 30, 45],          // 70-90% prediction market odds
-  tossup: [30, 60, 90, 150],        // 50-70% prediction market odds
+  precall: [0, 1, 5, 15],           // should be called at poll close (0 min)
+  strong: [15, 45, 90, 180],        // 70-90% odds, typically 15m–3h
+  tossup: [60, 180, 360, 1440],     // 50-70% odds, can take hours to days
 };
 
 // Score a time against thresholds → 0–100
@@ -74,10 +74,10 @@ export const grades: CallerGrade[] = [
     name: "VoteHub",
     shortName: "VH",
     color: callerColors.votehub,
-    avgAll: 12.4,
-    avgPrecall: 0.3,
-    avgStrong: 8.1,
-    avgTossup: 42.5,
+    avgAll: 48,
+    avgPrecall: 0,
+    avgStrong: 32,
+    avgTossup: 185,
     totalCalls: 487,
     firstCalls: 203,
     firstCallPct: 42,
@@ -91,10 +91,10 @@ export const grades: CallerGrade[] = [
     name: "Decision Desk HQ",
     shortName: "DDHQ",
     color: callerColors.ddhq,
-    avgAll: 18.7,
-    avgPrecall: 0.5,
-    avgStrong: 14.2,
-    avgTossup: 62.8,
+    avgAll: 62,
+    avgPrecall: 0,
+    avgStrong: 41,
+    avgTossup: 228,
     totalCalls: 487,
     firstCalls: 156,
     firstCallPct: 32,
@@ -108,10 +108,10 @@ export const grades: CallerGrade[] = [
     name: "Associated Press",
     shortName: "AP",
     color: callerColors.ap,
-    avgAll: 31.2,
-    avgPrecall: 1.2,
-    avgStrong: 22.8,
-    avgTossup: 98.4,
+    avgAll: 94,
+    avgPrecall: 2,
+    avgStrong: 68,
+    avgTossup: 342,
     totalCalls: 487,
     firstCalls: 128,
     firstCallPct: 26,

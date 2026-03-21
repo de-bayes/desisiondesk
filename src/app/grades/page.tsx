@@ -1,5 +1,5 @@
 import {
-  grades,
+  grades as staticGrades,
   recentCalls,
   fmt,
   scoreColor,
@@ -9,6 +9,7 @@ import {
   letterGrade,
   categoryScores,
 } from "@/lib/data";
+import { fetchSheetRaces, computeGradesFromSheet } from "@/lib/sheets";
 import Nav from "@/components/Nav";
 import OverallScoreBar from "@/components/charts/OverallScoreBar";
 import CategoryBreakdown from "@/components/charts/CategoryBreakdown";
@@ -21,7 +22,10 @@ import Distribution from "@/components/charts/Distribution";
 import RadarByType from "@/components/charts/RadarByType";
 import CumulativeFirstCalls from "@/components/charts/CumulativeFirstCalls";
 
-export default function Grades() {
+export default async function Grades() {
+  const sheetRaces = await fetchSheetRaces();
+  const sheetGrades = computeGradesFromSheet(sheetRaces);
+  const grades = sheetGrades && sheetGrades.some((g) => g.totalCalls > 0) ? sheetGrades : staticGrades;
   return (
     <div className="min-h-screen flex flex-col">
       <Nav active="/grades" />

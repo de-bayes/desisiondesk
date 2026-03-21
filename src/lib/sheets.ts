@@ -1,3 +1,5 @@
+import { type CallerGrade, callerColors } from "@/lib/data";
+
 const SHEET_ID = "1UgoMROR2bpH_QUZnvV0yZNd4St90DxlQWB1AToVEU-8";
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
@@ -93,4 +95,78 @@ export async function fetchSheetRaces(): Promise<SheetRace[]> {
   } catch {
     return [];
   }
+}
+
+// Normalize category strings from the sheet
+function normalizeCategory(raw: string): "precall" | "strong" | "tossup" | null {
+  const s = raw.toLowerCase().trim();
+  if (s.includes("pre") || s.includes("safe") || s.includes("uncontested")) return "precall";
+  if (s.includes("strong") || s.includes("lean")) return "strong";
+  if (s.includes("toss") || s.includes("competitive")) return "tossup";
+  return null;
+}
+
+const CALLER_META: Record<string, { id: string; name: string; shortName: string; color: string }> = {
+  VoteHub: { id: "votehub", name: "VoteHub", shortName: "VH", color: callerColors.votehub },
+  DDHQ: { id: "ddhq", name: "Decision Desk HQ", shortName: "DDHQ", color: callerColors.ddhq },
+  AP: { id: "ap", name: "Associated Press", shortName: "AP", color: callerColors.ap },
+};
+
+export function computeGradesFromSheet(races: SheetRace[]): CallerGrade[] | null {
+  if (races.length === 0) return null;
+
+  const callerNames = ["VoteHub", "DDHQ", "AP"];
+  const results: CallerGrade[] = [];
+
+  for (const callerName of callerNames) {
+    const meta = CALLER_META[callerName];
+    const precallTimes: number[] = [];
+    const strongTimes: number[] = [];
+    const tossupTimes: number[] = [];
+    const allTimes: number[] = [];
+    let firstCalls = 0;
+    let totalRacesWithCaller = 0;
+    let incorrectCalls = 0;
+
+    for (const race of races) {
+      const cat = normalizeCategory(race.category);
+      if (!cat) continue;
+
+      const callerTime = race.times.find((t) => t.caller === callerName);
+      if (!callerTime) continue;
+
+      totalRacesWithCaller++;
+      allTimes.push(callerTime.minutes);
+
+      if (cat === "precall") precallTimes.push(callerTime.minutes);
+      else if (cat === "strong") strongTimes.push(callerTime.minutes);
+      else if (cat === "tossup") tossupTimes.push(callerTime.minutes);
+
+      // First call = this caller had the lowest time in this race
+      const bestTime = Math.min(...race.times.map((t) => t.minutes));
+      if (callerTime.minutes === bestTime) firstCalls++;
+    }
+
+    const avg = (arr: number[]) => arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+
+    results.push({
+      id: meta.id,
+      name: meta.name,
+      shortName: meta.shortName,
+      color: meta.color,
+      avgAll: Math.round(avg(allTimes) * 10) / 10,
+      avgPrecall: Math.round(avg(precallTimes) * 10) / 10,
+      avgStrong: Math.round(avg(strongTimes) * 10) / 10,
+      avgTossup: Math.round(avg(tossupTimes) * 10) / 10,
+      totalCalls: totalRacesWithCaller,
+      firstCalls,
+      firstCallPct: totalRacesWithCaller > 0 ? Math.round((firstCalls / totalRacesWithCaller) * 100) : 0,
+      incorrectCalls,
+      countPrecall: precallTimes.length,
+      countStrong: strongTimes.length,
+      countTossup: tossupTimes.length,
+    });
+  }
+
+  return results;
 }
